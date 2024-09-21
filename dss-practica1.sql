@@ -1,3 +1,5 @@
+--20 DE SEPTIEMBRE - CARGA DE DATOS
+
 Use master
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'soporteF')
 BEGIN
@@ -83,7 +85,7 @@ GO
 
 CREATE TABLE Country (
     CountryID INT PRIMARY KEY IDENTITY, 
-    Name VARCHAR(100) NOT NULL CHECK (Name != '') -- El nombre del paÌs no debe estar vacÌo
+    Name VARCHAR(100) NOT NULL CHECK (Name != '') -- El nombre del pa√≠s no debe estar vac√≠o
 );
 GO
 
@@ -94,7 +96,7 @@ GO
 
 CREATE TABLE DocumentType (
     DocumentTypeID INT PRIMARY KEY IDENTITY, 
-    TypeName VARCHAR(50) NOT NULL CHECK (TypeName != '') -- El nombre del tipo de documento no debe estar vacÌo
+    TypeName VARCHAR(50) NOT NULL CHECK (TypeName != '') -- El nombre del tipo de documento no debe estar vac√≠o
 );
 GO
 --
@@ -104,7 +106,7 @@ GO
 
 CREATE TABLE CustomerType (
     CustomerTypeID INT PRIMARY KEY IDENTITY,
-    TypeName VARCHAR(50) NOT NULL CHECK (TypeName != ''), -- El nombre del tipo de documento no debe estar vacÌo
+    TypeName VARCHAR(50) NOT NULL CHECK (TypeName != ''), -- El nombre del tipo de documento no debe estar vac√≠o
 	Description NVARCHAR(100) NOT NULL CHECK (Description != '')
 );
 GO
@@ -115,7 +117,7 @@ GO
 
 CREATE TABLE FlightCategory (
     FlightCategoryID INT PRIMARY KEY IDENTITY, 
-    CategoryName NVARCHAR(50) NOT NULL CHECK (CategoryName != '') -- El nombre de la categorÌa de vuelo no debe estar vacÌo
+    CategoryName NVARCHAR(50) NOT NULL CHECK (CategoryName != '') -- El nombre de la categor√≠a de vuelo no debe estar vac√≠o
 );
 GO
 
@@ -125,7 +127,7 @@ GO
 
 CREATE TABLE PlaneModel (
     PlaneModelID INT PRIMARY KEY IDENTITY, 
-    Description VARCHAR(100) NOT NULL CHECK (Description != ''), -- La descripciÛn no debe estar vacÌa
+    Description VARCHAR(100) NOT NULL CHECK (Description != ''), -- La descripci√≥n no debe estar vac√≠a
     Graphic VARBINARY(MAX),
 	SeatingCapacity INT NOT NULL,
 );
@@ -138,7 +140,7 @@ GO
 
 CREATE TABLE Clase (
     ClaseID INT PRIMARY KEY IDENTITY, 
-    NombreClase VARCHAR(50) NOT NULL CHECK (NombreClase != ''), -- El nombre de la clase no debe estar vacÌo
+    NombreClase VARCHAR(50) NOT NULL CHECK (NombreClase != ''), -- El nombre de la clase no debe estar vac√≠o
     Price FLOAT NOT NULL
 );
 GO
@@ -149,8 +151,8 @@ IF OBJECT_ID('City', 'U') IS NOT NULL
 GO
 CREATE TABLE City (
     CityID INT PRIMARY KEY IDENTITY, 
-    Name NVARCHAR(100) NOT NULL CHECK (Name != ''), -- El nombre de la ciudad no debe estar vacÌo
-    CountryID INT NOT NULL, -- Clave for·nea
+    Name NVARCHAR(100) NOT NULL CHECK (Name != ''), -- El nombre de la ciudad no debe estar vac√≠o
+    CountryID INT NOT NULL, -- Clave for√°nea
     FOREIGN KEY (CountryID) REFERENCES Country(CountryID)--No action 
 );
 GO
@@ -162,8 +164,8 @@ GO
 
 CREATE TABLE Airport (
     IATA_Code VARCHAR(10) PRIMARY KEY, 
-    Name NVARCHAR(100) NOT NULL CHECK (Name != ''), -- El nombre del aeropuerto no debe estar vacÌo
-    CityID INT NOT NULL, -- Clave for·nea
+    Name NVARCHAR(100) NOT NULL CHECK (Name != ''), -- El nombre del aeropuerto no debe estar vac√≠o
+    CityID INT NOT NULL, -- Clave for√°nea
     FOREIGN KEY (CityID) REFERENCES City(CityID)
 	ON DELETE CASCADE 
 );
@@ -225,7 +227,7 @@ BEGIN
     DROP INDEX idx_Customer_Name ON Customer;
 END
 GO
--- CREATE INDEX idx_Customer_Name ON Customer(Name); -- Õndice para buscar clientes por nombre
+-- CREATE INDEX idx_Customer_Name ON Customer(Name); -- √çndice para buscar clientes por nombre
 -- GO
 
 IF OBJECT_ID('passenger', 'U') IS NOT NULL
@@ -247,26 +249,26 @@ GO
 
 CREATE TABLE Document (
     DocumentID INT PRIMARY KEY IDENTITY, 
-    DocumentTypeID INT, -- Clave for·nea
-    DocumentNumber VARCHAR(50) NOT NULL CHECK (DocumentNumber != ''), -- El n˙mero de documento no debe estar vacÌo
-    IssueDate DATE CHECK (IssueDate <= GETDATE()), -- La fecha de emisiÛn no puede ser en el futuro
-    ExpiryDate DATE, -- La fecha de expiraciÛn
-    IssuingCityID INT NOT NULL, -- Ciudad emisora no debe estar vacÌa
-    passengerID INT, -- Clave for·nea
+    DocumentTypeID INT, -- Clave for√°nea
+    DocumentNumber VARCHAR(50) NOT NULL CHECK (DocumentNumber != ''), -- El n√∫mero de documento no debe estar vac√≠o
+    IssueDate DATE CHECK (IssueDate <= GETDATE()), -- La fecha de emisi√≥n no puede ser en el futuro
+    ExpiryDate DATE, -- La fecha de expiraci√≥n
+    IssuingCityID INT NOT NULL, -- Ciudad emisora no debe estar vac√≠a
+    passengerID INT, -- Clave for√°nea
     FOREIGN KEY (DocumentTypeID) REFERENCES DocumentType(DocumentTypeID),
 	FOREIGN KEY (IssuingCityID) REFERENCES City(CityID),
     FOREIGN KEY (passengerID) REFERENCES passenger(passengerID)
     ON DELETE SET NULL,
-    CONSTRAINT CHK_Document_Dates CHECK (ExpiryDate >= IssueDate OR ExpiryDate IS NULL) -- La fecha de expiraciÛn no puede ser anterior a la fecha de emisiÛn, o puede ser NULL
+    CONSTRAINT CHK_Document_Dates CHECK (ExpiryDate >= IssueDate OR ExpiryDate IS NULL) -- La fecha de expiraci√≥n no puede ser anterior a la fecha de emisi√≥n, o puede ser NULL
 );
 GO
--- Verifica y elimina el Ìndice en Document.CustomerID si ya existe
+-- Verifica y elimina el √≠ndice en Document.CustomerID si ya existe
 IF EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_Document_CustomerID' AND object_id = OBJECT_ID('Document'))
 BEGIN
     DROP INDEX idx_Document_CustomerID ON Document;
 END
 GO
--- CREATE INDEX idx_Document_CustomerID ON Document(CustomerID); -- Õndice en Document.CustomerID
+-- CREATE INDEX idx_Document_CustomerID ON Document(CustomerID); -- √çndice en Document.CustomerID
 -- GO          
 
 IF OBJECT_ID('Airline', 'U') IS NOT NULL
@@ -288,10 +290,10 @@ IF OBJECT_ID('Airplane', 'U') IS NOT NULL
 GO
 CREATE TABLE Airplane (
     AirplaneID INT PRIMARY KEY IDENTITY, 
-    RegistrationNumber VARCHAR(50) NOT NULL CHECK (RegistrationNumber != ''), -- El n˙mero de registro no debe estar vacÌo
-    BeginOfOperation DATE NOT NULL CHECK (BeginOfOperation <= GETDATE()), -- La fecha de inicio de operaciÛn no puede ser en el futuro
-    Status VARCHAR(50) NOT NULL CHECK (Status != ''), -- El estado no debe estar vacÌo
-    PlaneModelID INT NOT NULL, -- Clave for·nea
+    RegistrationNumber VARCHAR(50) NOT NULL CHECK (RegistrationNumber != ''), -- El n√∫mero de registro no debe estar vac√≠o
+    BeginOfOperation DATE NOT NULL CHECK (BeginOfOperation <= GETDATE()), -- La fecha de inicio de operaci√≥n no puede ser en el futuro
+    Status VARCHAR(50) NOT NULL CHECK (Status != ''), -- El estado no debe estar vac√≠o
+    PlaneModelID INT NOT NULL, -- Clave for√°nea
     FOREIGN KEY (PlaneModelID) REFERENCES PlaneModel(PlaneModelID)
 );
 GO
@@ -304,10 +306,10 @@ GO
 CREATE TABLE FlightNumber (
     FlightNumberID INT PRIMARY KEY IDENTITY, 
     DepartureTime DATETIME NOT NULL CHECK (DepartureTime > GETDATE()), -- La hora de salida debe ser en el futuro
-    Description VARCHAR(50) NOT NULL CHECK (Description != ''), -- La descripciÛn no debe estar vacÌa
+    Description VARCHAR(50) NOT NULL CHECK (Description != ''), -- La descripci√≥n no debe estar vac√≠a
     StartAirportID VARCHAR(10) NOT NULL, 
     GoalAirportID VARCHAR(10) NOT NULL,
-	AirlineID INT NOT NULL, -- La aerolÌnea no debe estar vacÌa
+	AirlineID INT NOT NULL, -- La aerol√≠nea no debe estar vac√≠a
     AirplaneID INT NOT NULL,
     FlightCategoryID INT NOT NULL, 
 	FOREIGN KEY (AirlineID) REFERENCES Airline(AirlineID),
@@ -320,20 +322,20 @@ CREATE TABLE FlightNumber (
 );
 GO
 
--- Verifica y elimina el Ìndice en FlightNumber.Airline si ya existe
+-- Verifica y elimina el √≠ndice en FlightNumber.Airline si ya existe
 IF EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_FlightNumber_Airline' AND object_id = OBJECT_ID('FlightNumber'))
 BEGIN
     DROP INDEX idx_FlightNumber_Airline ON FlightNumber;
 END
 GO
 
--- Verifica y elimina el Ìndice en FlightNumber.DepartureTime si ya existe
+-- Verifica y elimina el √≠ndice en FlightNumber.DepartureTime si ya existe
 IF EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_FlightNumber_DepartureTime' AND object_id = OBJECT_ID('FlightNumber'))
 BEGIN
     DROP INDEX idx_FlightNumber_DepartureTime ON FlightNumber;
 END
 GO
-CREATE INDEX idx_FlightNumber_DepartureTime ON FlightNumber(DepartureTime); -- Õndice en FlightNumber.DepartureTime
+CREATE INDEX idx_FlightNumber_DepartureTime ON FlightNumber(DepartureTime); -- √çndice en FlightNumber.DepartureTime
 GO
 
 
@@ -346,10 +348,10 @@ GO
 CREATE TABLE FrequentFlyerCard (
     FFCNumber INT PRIMARY KEY, 
     Miles INT NOT NULL CHECK (Miles >= 0), -- Los millas no pueden ser negativas
-    MealCode VARCHAR(10) NOT NULL CHECK (MealCode != ''), -- El cÛdigo de la comida no debe estar vacÌo
-    IssueDate DATE CHECK (IssueDate <= GETDATE()), -- La fecha de emisiÛn no puede ser en el futuro
+    MealCode VARCHAR(10) NOT NULL CHECK (MealCode != ''), -- El c√≥digo de la comida no debe estar vac√≠o
+    IssueDate DATE CHECK (IssueDate <= GETDATE()), -- La fecha de emisi√≥n no puede ser en el futuro
     ExpiryDate DATE NOT NULL,
-	CustomerID INT NOT NULL, -- Clave for·nea
+	CustomerID INT NOT NULL, -- Clave for√°nea
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -363,7 +365,7 @@ GO
 
 CREATE TABLE Ticket (
     TicketID INT PRIMARY KEY IDENTITY, 
-    TicketingCode VARCHAR(50) NOT NULL CHECK (TicketingCode != ''), -- El cÛdigo del ticket no debe estar vacÌo
+    TicketingCode VARCHAR(50) NOT NULL CHECK (TicketingCode != ''), -- El c√≥digo del ticket no debe estar vac√≠o
 	Number INT NOT NULL, 
 	PurchaseDate Date NOT NULL, 
 	TotalImport Float NOT NULL,
@@ -392,7 +394,7 @@ GO
 
 
 
--- Verifica y elimina el Ìndice en Ticket.CustomerID si ya existe
+-- Verifica y elimina el √≠ndice en Ticket.CustomerID si ya existe
 IF EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_Ticket_CustomerID' AND object_id = OBJECT_ID('Ticket'))
 BEGIN
     DROP INDEX idx_Ticket_CustomerID ON Ticket;
@@ -400,13 +402,13 @@ END
 GO
 
 
--- Verifica y elimina el Ìndice ˙nico en Ticket.TicketingCode si ya existe
+-- Verifica y elimina el √≠ndice √∫nico en Ticket.TicketingCode si ya existe
 IF EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_Ticket_TicketingCode' AND object_id = OBJECT_ID('Ticket'))
 BEGIN
     DROP INDEX idx_Ticket_TicketingCode ON Ticket;
 END
 GO
-CREATE UNIQUE INDEX idx_Ticket_TicketingCode ON Ticket(TicketingCode); -- Õndice ˙nico en Ticket.TicketingCode
+CREATE UNIQUE INDEX idx_Ticket_TicketingCode ON Ticket(TicketingCode); -- √çndice √∫nico en Ticket.TicketingCode
 GO
 
 
@@ -417,10 +419,10 @@ CREATE TABLE Flight (
     FlightID INT PRIMARY KEY IDENTITY, 
     BoardingTime DATETIME NOT NULL CHECK (BoardingTime > GETDATE()), -- La hora de embarque debe ser en el futuro
     FlightDate DATE NOT NULL CHECK (FlightDate >= CONVERT(DATE, GETDATE())), -- La fecha del vuelo no puede ser anterior a la fecha actual
-    Gate VARCHAR(50) NOT NULL CHECK (Gate != ''), -- La puerta no debe estar vacÌa
-    CheckInCounter VARCHAR(50) NOT NULL CHECK (CheckInCounter != ''), -- El mostrador de check-in no debe estar vacÌo
+    Gate VARCHAR(50) NOT NULL CHECK (Gate != ''), -- La puerta no debe estar vac√≠a
+    CheckInCounter VARCHAR(50) NOT NULL CHECK (CheckInCounter != ''), -- El mostrador de check-in no debe estar vac√≠o
     Status VARCHAR(50) NOT NULL CHECK (Status != ''), 
-	FlightNumberID INT NOT NULL, -- Clave for·nea
+	FlightNumberID INT NOT NULL, -- Clave for√°nea
 	AirplaneID INT NOT NULL, 
     FOREIGN KEY (FlightNumberID) REFERENCES FlightNumber(FlightNumberID),
 	FOREIGN KEY (AirplaneID) REFERENCES Airplane(AirplaneID)
@@ -522,10 +524,10 @@ IF OBJECT_ID('Seat', 'U') IS NOT NULL
 GO
 CREATE TABLE Seat (
     SeatID INT PRIMARY KEY IDENTITY, 
-    Size VARCHAR(50) NOT NULL CHECK (Size != ''), -- El tamaÒo no debe estar vacÌo
-    Number INT NOT NULL CHECK (Number > 0), -- El n˙mero del asiento debe ser positivo
-    Location VARCHAR(50) NOT NULL CHECK (Location != ''), -- La ubicaciÛn no debe estar vacÌa
-	PlaneModelID INT NOT NULL, -- Clave for·nea
+    Size VARCHAR(50) NOT NULL CHECK (Size != ''), -- El tama√±o no debe estar vac√≠o
+    Number INT NOT NULL CHECK (Number > 0), -- El n√∫mero del asiento debe ser positivo
+    Location VARCHAR(50) NOT NULL CHECK (Location != ''), -- La ubicaci√≥n no debe estar vac√≠a
+	PlaneModelID INT NOT NULL, -- Clave for√°nea
     FOREIGN KEY (PlaneModelID) REFERENCES PlaneModel(PlaneModelID)
 );
 GO
@@ -535,9 +537,9 @@ IF OBJECT_ID('AvailableSeat', 'U') IS NOT NULL
 GO
 
 CREATE TABLE AvailableSeat (
-    AvailableSeatID INT PRIMARY KEY IDENTITY, -- 10 dÌgitos
-    FlightID INT NOT NULL, -- Clave for·nea
-    SeatID INT NOT NULL, -- Clave for·nea
+    AvailableSeatID INT PRIMARY KEY IDENTITY, -- 10 d√≠gitos
+    FlightID INT NOT NULL, -- Clave for√°nea
+    SeatID INT NOT NULL, -- Clave for√°nea
 	CheckInID INT NOT NULL,
     FOREIGN KEY (FlightID) REFERENCES Flight(FlightID),
     FOREIGN KEY (SeatID) REFERENCES Seat(SeatID),
@@ -552,10 +554,10 @@ GO
 CREATE TABLE Coupon (
     CouponID INT PRIMARY KEY IDENTITY, 
     DateOfRedemption DATE NOT NULL CHECK (DateOfRedemption <= GETDATE()), -- La fecha de canje no puede ser en el futuro
-    Standby VARCHAR(50) NOT NULL CHECK (Standby != ''), -- El standby no debe estar vacÌo
-    MealCode VARCHAR(50) NOT NULL CHECK (MealCode != ''), -- El cÛdigo de comida no debe estar vacÌo
-    TicketID INT NOT NULL, -- Clave for·nea
-    FlightID INT NOT NULL, -- Clave for·nea
+    Standby VARCHAR(50) NOT NULL CHECK (Standby != ''), -- El standby no debe estar vac√≠o
+    MealCode VARCHAR(50) NOT NULL CHECK (MealCode != ''), -- El c√≥digo de comida no debe estar vac√≠o
+    TicketID INT NOT NULL, -- Clave for√°nea
+    FlightID INT NOT NULL, -- Clave for√°nea
     ClaseID INT,
     FOREIGN KEY (ClaseID) REFERENCES Clase(ClaseID)
     ON DELETE SET NULL
@@ -570,21 +572,21 @@ CREATE TABLE Coupon (
 GO
 
 
--- Verifica y elimina el Ìndice en Coupon.TicketID si ya existe
+-- Verifica y elimina el √≠ndice en Coupon.TicketID si ya existe
 IF EXISTS (SELECT * FROM sys.indexes WHERE name = 'idx_Coupon_TicketID' AND object_id = OBJECT_ID('Coupon'))
 BEGIN
     DROP INDEX idx_Coupon_TicketID ON Coupon;
 END
 GO
-CREATE INDEX idx_Coupon_TicketID ON Coupon(TicketID); -- Õndice en Coupon.TicketID
+CREATE INDEX idx_Coupon_TicketID ON Coupon(TicketID); -- √çndice en Coupon.TicketID
 GO
 
 
 CREATE TABLE PiecesOfLuggage (
     LuggageID INT PRIMARY KEY IDENTITY, 
-    Number INT NOT NULL CHECK (Number > 0), -- El n˙mero del equipaje debe ser positivo
+    Number INT NOT NULL CHECK (Number > 0), -- El n√∫mero del equipaje debe ser positivo
     Weight DECIMAL(5, 2) NOT NULL CHECK (Weight > 0 AND Weight <= 999.99), -- El peso debe ser positivo y no exceder 999.99 kg
-    CouponID INT NOT NULL, -- Clave for·nea
+    CouponID INT NOT NULL, -- Clave for√°nea
     FOREIGN KEY (CouponID) REFERENCES Coupon(CouponID)
     ON DELETE CASCADE
     ON UPDATE NO ACTION
@@ -649,7 +651,7 @@ VALUES
 ('Charter'),         -- Vuelos privados o arrendados
 ('Cargo'),           -- Vuelos de carga
 ('Military'),        -- Vuelos militares
-('VIP');             -- Vuelos VIP†o†de†lujo
+('VIP');             -- Vuelos VIP¬†o¬†de¬†lujo
 
 GO
 
@@ -715,47 +717,47 @@ INSERT INTO PlaneModel (Description, Graphic, SeatingCapacity) VALUES
 
 -- DATOS DE CLASE
 INSERT INTO Clase (NombreClase, Price) VALUES 
-('EconÛmica', 100.00),
+('Econ√≥mica', 100.00),
 ('Ejecutiva', 300.00),
 ('Primera Clase', 600.00),
 ('Premium Economy', 200.00),
-('Business Class',†400.00);
+('Business Class',¬†400.00);
 
 
 -- DATOS DE TIPO DE DOCUMENTO
 INSERT INTO DocumentType (TypeName) VALUES 
 ('Pasaporte'),
-('CÈdula de Identidad'),
+('C√©dula de Identidad'),
 ('Tarjeta de Residencia'),
 ('Licencia de Conducir'),
-('Documento Nacional†de†Identidad');
+('Documento Nacional¬†de¬†Identidad');
 
 -- DATOS DE TIPO DE CLIENTE
 INSERT INTO CustomerType (TypeName, Description) VALUES 
-('Regular', 'Clientes que viajan con frecuencia y tienen acceso a tarifas est·ndar.'),
-('VIP', 'Clientes de alto nivel que reciben atenciÛn y beneficios especiales.'),
+('Regular', 'Clientes que viajan con frecuencia y tienen acceso a tarifas est√°ndar.'),
+('VIP', 'Clientes de alto nivel que reciben atenci√≥n y beneficios especiales.'),
 ('Estudiante', 'Clientes que viajan como estudiantes, con descuentos especiales.'),
-('NiÒo', 'Clientes que son menores de edad y tienen tarifas reducidas.'),
-('Militar', 'Clientes con afiliaciÛn militar que reciben tarifas y beneficios†especiales.');
+('Ni√±o', 'Clientes que son menores de edad y tienen tarifas reducidas.'),
+('Militar', 'Clientes con afiliaci√≥n militar que reciben tarifas y beneficios¬†especiales.');
 
 --DATOS DE METODO DE PAGO
 INSERT INTO PaymentMethod (Name) VALUES 
 ('Efectivo'),
-('Tarjeta de CrÈdito'),
-('CÛdigo†QR');
+('Tarjeta de Cr√©dito'),
+('C√≥digo¬†QR');
 
 -- DATOS DE TIPO DE COMPESACION
 INSERT INTO CompesationType (Name, Description, ValueType, IsActive, ExpirationPolicy) VALUES 
-('Reembolso', 'CompensaciÛn por cancelaciÛn de vuelo.', 'Monetaria', 1, '2025-12-31'),
-('Bono de Viaje', 'CrÈdito para futuros vuelos.', 'No Monetaria', 1, '2026-06-30'),
-('CompensaciÛn por Retraso', 'CompensaciÛn por retrasos mayores a 2 horas.', 'Monetaria', 1, '2025-12-31'),
-('Asiento Mejorado', 'Mejora de clase en el prÛximo vuelo.', 'No Monetaria', 1, '2026-12-31'),
-('Descuento', 'Descuento en la prÛxima compra de billete.', 'Monetaria', 1,†'2026-11-30');
+('Reembolso', 'Compensaci√≥n por cancelaci√≥n de vuelo.', 'Monetaria', 1, '2025-12-31'),
+('Bono de Viaje', 'Cr√©dito para futuros vuelos.', 'No Monetaria', 1, '2026-06-30'),
+('Compensaci√≥n por Retraso', 'Compensaci√≥n por retrasos mayores a 2 horas.', 'Monetaria', 1, '2025-12-31'),
+('Asiento Mejorado', 'Mejora de clase en el pr√≥ximo vuelo.', 'No Monetaria', 1, '2026-12-31'),
+('Descuento', 'Descuento en la pr√≥xima compra de billete.', 'Monetaria', 1,¬†'2026-11-30');
 
 
 --Procedimiento que carga datos en Country
 CREATE PROCEDURE InsertRandomCountry
-    @num_countries INT -- N˙mero de paÌses a insertar
+    @num_countries INT -- N√∫mero de pa√≠ses a insertar
 AS
 BEGIN
     DECLARE @i INT = 1;
@@ -766,7 +768,7 @@ BEGIN
         -- Seleccionar un nombre aleatorio de la tabla PaisNombre
         SELECT TOP 1 @name = Name 
         FROM NameCountry 
-        ORDER BY NEWID(); -- NEWID() genera un valor ˙nico para ordenar aleatoriamente
+        ORDER BY NEWID(); -- NEWID() genera un valor √∫nico para ordenar aleatoriamente
 
         -- Insertar el nombre en la tabla Country
         INSERT INTO Country (Name)
@@ -782,7 +784,7 @@ EXEC InsertRandomCountry @num_countries = 100;
 
 --Procedimiento que carga datos en City
 CREATE PROCEDURE InsertRandomCiudad
-    @num_city INT -- N˙mero de paÌses a insertar
+    @num_city INT -- N√∫mero de pa√≠ses a insertar
 AS
 BEGIN
     DECLARE @i INT = 1;
@@ -793,7 +795,7 @@ BEGIN
         -- Seleccionar un nombre aleatorio de la tabla NombreCiudad
         SELECT TOP 1 @name = Name 
         FROM NameCity 
-        ORDER BY NEWID(); -- NEWID() genera un valor ˙nico para ordenar aleatoriamente
+        ORDER BY NEWID(); -- NEWID() genera un valor √∫nico para ordenar aleatoriamente
 
         -- Insertar el nombre en la tabla City
 
@@ -825,15 +827,15 @@ BEGIN
     DECLARE @counter INT = 0;
     
 
-    -- Bucle para insertar m˙ltiples aeropuertos
+    -- Bucle para insertar m√∫ltiples aeropuertos
     WHILE @counter < @NumberOfAirports
     BEGIN
         SET @iata_exists = 1;
 
-        -- Bucle para generar un IATA_Code ˙nico
+        -- Bucle para generar un IATA_Code √∫nico
         WHILE @iata_exists = 1
         BEGIN
-            -- Generar IATA_Code de 3 letras may˙sculas
+            -- Generar IATA_Code de 3 letras may√∫sculas
             SET @random_iata = CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + 
                                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + 
                                CHAR(65 + ABS(CHECKSUM(NEWID())) % 26);
@@ -874,15 +876,15 @@ BEGIN
     DECLARE @counter INT = 1;
     WHILE @counter <= @NumberOfAirlines
     BEGIN
-        -- Generar nombre aleatorio para la aerolÌnea
+        -- Generar nombre aleatorio para la aerol√≠nea
         SELECT TOP 1 @Name = Name 
         FROM NameAirport
         ORDER BY NEWID();
 
-        -- Generar aÒo de fundaciÛn aleatorio entre 1900 y el aÒo actual
-        SET @FoundedYear = DATEADD(YEAR, -(ABS(CHECKSUM(NEWID())) % 123), GETDATE()); -- 123 aÒos atr·s desde el aÒo actual
+        -- Generar a√±o de fundaci√≥n aleatorio entre 1900 y el a√±o actual
+        SET @FoundedYear = DATEADD(YEAR, -(ABS(CHECKSUM(NEWID())) % 123), GETDATE()); -- 123 a√±os atr√°s desde el a√±o actual
 
-        -- Generar tamaÒo de flota aleatorio entre 1 y 500
+        -- Generar tama√±o de flota aleatorio entre 1 y 500
         SET @Fleet_Size = ABS(CHECKSUM(NEWID())) % 500 + 1;
 
         -- Elegir CityID aleatorio
@@ -890,7 +892,7 @@ BEGIN
         FROM City 
         ORDER BY NEWID(); -- Elegir un CityID al azar
 
-        -- Insertar la nueva aerolÌnea en la tabla
+        -- Insertar la nueva aerol√≠nea en la tabla
         INSERT INTO Airline (Name, FoundedYear, Fleet_Size, CityID)
         VALUES (@Name, @FoundedYear, @Fleet_Size, @CityID);
 
@@ -918,8 +920,8 @@ BEGIN
 
     WHILE @i < @NumberOfAirplanes
     BEGIN
-        SET @RegistrationNumber = CONCAT('REG-', NEWID()); -- Generar un n˙mero de registro aleatorio
-        SET @BeginOfOperation = DATEADD(DAY, -FLOOR(RAND() * 3650), GETDATE()); -- Fecha aleatoria dentro de los ˙ltimos 10 aÒos
+        SET @RegistrationNumber = CONCAT('REG-', NEWID()); -- Generar un n√∫mero de registro aleatorio
+        SET @BeginOfOperation = DATEADD(DAY, -FLOOR(RAND() * 3650), GETDATE()); -- Fecha aleatoria dentro de los √∫ltimos 10 a√±os
         SET @Status = CASE WHEN RAND() < 0.5 THEN 'Active' ELSE 'Inactive' END; -- Estado aleatorio
         select top 1 @PlaneModelID= PlaneModelID from PlaneModel ORDER BY NEWID();
 
@@ -952,7 +954,7 @@ BEGIN
         -- Generar hora de salida futura
         SET @DepartureTime = DATEADD(MINUTE, ABS(CHECKSUM(NEWID())) % (30 * 24 * 60), GETDATE());
 
-        -- Generar descripciÛn aleatoria
+        -- Generar descripci√≥n aleatoria
         SET @Description = 'Vuelo ' + CAST(@counter + 1 AS VARCHAR(3));
 
         -- Elegir aeropuertos aleatorios
@@ -965,7 +967,7 @@ BEGIN
         WHERE IATA_Code <> @StartAirportID 
         ORDER BY NEWID(); -- Elegir otro aeropuerto al azar diferente
 
-        -- Elegir aerolÌnea, aviÛn y categorÌa de vuelo aleatorios
+        -- Elegir aerol√≠nea, avi√≥n y categor√≠a de vuelo aleatorios
         SELECT TOP 1 @AirlineID = AirlineID 
         FROM Airline 
         ORDER BY NEWID();
@@ -1009,10 +1011,10 @@ BEGIN
 
     WHILE @i < @Number_Flights
     BEGIN
-        -- Generar una fecha de vuelo aleatoria en los prÛximos 2 aÒos
-        SET @FlightDate = DATEADD(DAY, FLOOR(RAND() * 730), GETDATE()); -- Fecha en el futuro (0 a 730 dÌas desde hoy)
+        -- Generar una fecha de vuelo aleatoria en los pr√≥ximos 2 a√±os
+        SET @FlightDate = DATEADD(DAY, FLOOR(RAND() * 730), GETDATE()); -- Fecha en el futuro (0 a 730 d√≠as desde hoy)
 
-        -- Generar una hora de embarque aleatoria en el mismo dÌa de vuelo (30 a 210 minutos antes del vuelo)
+        -- Generar una hora de embarque aleatoria en el mismo d√≠a de vuelo (30 a 210 minutos antes del vuelo)
         SET @BoardingTime = DATEADD(MINUTE, FLOOR(RAND() * 180) + 30, CAST(@FlightDate AS DATETIME));
 
         -- Generar una puerta de embarque aleatoria (A-Z)
@@ -1066,15 +1068,15 @@ BEGIN
         FROM PlaneModel
         ORDER BY NEWID();
 
-        -- Generar tamaÒo aleatorio
+        -- Generar tama√±o aleatorio
 		SELECT TOP 1 @Size = NombreClase
         FROM Clase
         ORDER BY NEWID();
 
-        -- N˙mero de asiento aleatorio (suponiendo un rango de 1 a la capacidad)
+        -- N√∫mero de asiento aleatorio (suponiendo un rango de 1 a la capacidad)
         SET @Number = FLOOR(RAND() * @SeatingCapacity) + 1;
 
-        -- Generar ubicaciÛn aleatoria (Ej. "Row 5, Column A")
+        -- Generar ubicaci√≥n aleatoria (Ej. "Row 5, Column A")
         SET @Location = CONCAT('Row ', FLOOR(RAND() * 20) + 1, ', Column ', CHAR(65 + FLOOR(RAND() * 6))); -- A-F
 
          
@@ -1104,10 +1106,10 @@ BEGIN
 
     WHILE @i < @NumberOfCancelations
     BEGIN
-        -- Generar una fecha de cancelaciÛn aleatoria (en los prÛximos 2 aÒos)
+        -- Generar una fecha de cancelaci√≥n aleatoria (en los pr√≥ximos 2 a√±os)
         SET @CancelationDate = DATEADD(DAY, FLOOR(RAND() * 730), GETDATE());
 
-        -- Seleccionar una razÛn de cancelaciÛn aleatoria
+        -- Seleccionar una raz√≥n de cancelaci√≥n aleatoria
         SET @Reason = CASE 
             WHEN RAND() < 0.2 THEN 'Weather'
             WHEN RAND() < 0.4 THEN 'Technical Issue'
@@ -1115,11 +1117,11 @@ BEGIN
             WHEN RAND() < 0.8 THEN 'Air Traffic Control'
             ELSE 'Other'
         END;
-        -- Seleccionar un FlightID v·lido aleatoriamente desde la tabla Flight
+        -- Seleccionar un FlightID v√°lido aleatoriamente desde la tabla Flight
         SELECT TOP 1 @FlightID = FlightID
         FROM Flight
         ORDER BY NEWID(); -- Selecciona un vuelo aleatorio
-        -- Insertar la cancelaciÛn en la tabla FlightCancelation
+        -- Insertar la cancelaci√≥n en la tabla FlightCancelation
         INSERT INTO FlightCancelation (CancelationDate, Reason, FlightID)
         VALUES (@CancelationDate, @Reason, @FlightID);
         SET @i = @i + 1;
@@ -1148,30 +1150,30 @@ BEGIN
 
     WHILE @i < @NumberOfCompensations
     BEGIN
-        -- Generar un monto de compensaciÛn aleatorio entre 100 y 1000
+        -- Generar un monto de compensaci√≥n aleatorio entre 100 y 1000
         SET @Amount = ROUND(RAND() * (1000 - 100) + 100, 2);
 
-        -- Generar una descripciÛn aleatoria
+        -- Generar una descripci√≥n aleatoria
         SET @Descripcion = CASE 
             WHEN RAND() < 0.3 THEN 'Flight delay compensation'
             WHEN RAND() < 0.6 THEN 'Cancellation compensation'
             ELSE 'Overbooking compensation'
         END;
 
-        -- Generar una fecha de compensaciÛn aleatoria en los prÛximos 2 aÒos
+        -- Generar una fecha de compensaci√≥n aleatoria en los pr√≥ximos 2 a√±os
         SET @CompensationDate = DATEADD(DAY, FLOOR(RAND() * 730), GETDATE());
 
-        -- Seleccionar un FlightCancelationID v·lido aleatoriamente desde la tabla FlightCancelation
+        -- Seleccionar un FlightCancelationID v√°lido aleatoriamente desde la tabla FlightCancelation
         SELECT TOP 1 @FCancelationID = FCancelationID
         FROM FlightCancelation
-        ORDER BY NEWID(); -- Selecciona una cancelaciÛn aleatoria
+        ORDER BY NEWID(); -- Selecciona una cancelaci√≥n aleatoria
 
-        -- Seleccionar un CompesationTypeID v·lido aleatoriamente desde la tabla CompesationType
+        -- Seleccionar un CompesationTypeID v√°lido aleatoriamente desde la tabla CompesationType
         SELECT TOP 1 @CompesationTypeID = CompesationTypeID
         FROM CompesationType
-        ORDER BY NEWID(); -- Selecciona un tipo de compensaciÛn aleatorio
+        ORDER BY NEWID(); -- Selecciona un tipo de compensaci√≥n aleatorio
 
-        -- Insertar la compensaciÛn en la tabla Compesation
+        -- Insertar la compensaci√≥n en la tabla Compesation
         INSERT INTO Compesation (Amount, Descripcion, CompensationDate, FCancelationID, CompesationTypeID)
         VALUES (@Amount, @Descripcion, @CompensationDate, @FCancelationID, @CompesationTypeID);
 
@@ -1184,7 +1186,7 @@ EXEC InsertRandomCompensations @NumberOfCompensations=50000;
 
 --Procedimiento para insertar datos en Persona
 CREATE PROCEDURE InsertRandomPerson
-    @num_person INT -- N˙mero de paÌses a insertar
+    @num_person INT -- N√∫mero de pa√≠ses a insertar
 AS
 BEGIN
     DECLARE @i INT = 1;
@@ -1196,7 +1198,7 @@ BEGIN
         -- Seleccionar un nombre aleatorio de la tabla PaisNombre
         SELECT TOP 1 @name = Name 
         FROM NamePerson
-        ORDER BY NEWID(); -- NEWID() genera un valor ˙nico para ordenar aleatoriamente
+        ORDER BY NEWID(); -- NEWID() genera un valor √∫nico para ordenar aleatoriamente
 
 		SET @PhoneNumber = 70000000 + FLOOR(RAND() * 10000000);
 
@@ -1231,7 +1233,7 @@ BEGIN
         WHERE PersonID NOT IN (SELECT PassengerID FROM Passenger) -- Evitar duplicados
         ORDER BY NEWID(); -- Selecciona un ID de persona aleatorio
 
-        -- Verificar que se encontrÛ un PassengerID v·lido
+        -- Verificar que se encontr√≥ un PassengerID v√°lido
         IF @PassengerID IS NOT NULL
         BEGIN
             -- Generar asistencia especial aleatoria (0 o 1)
@@ -1246,7 +1248,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            -- No hay m·s pasajeros disponibles para insertar, salir del bucle
+            -- No hay m√°s pasajeros disponibles para insertar, salir del bucle
             BREAK;
         END
     END
@@ -1277,7 +1279,7 @@ BEGIN
         ORDER BY NEWID(); -- Selecciona un ID de persona aleatorio
 
         -- Generar una fecha de nacimiento aleatoria
-        SET @DateOfBirth = DATEADD(YEAR, -FLOOR(RAND() * 40) - 18, GETDATE()); -- Edad entre 18 y 57 aÒos
+        SET @DateOfBirth = DATEADD(YEAR, -FLOOR(RAND() * 40) - 18, GETDATE()); -- Edad entre 18 y 57 a√±os
 
         -- Generar un email aleatorio
         SET @Email = CONCAT( @CustomerID, '@gmail.com');
@@ -1315,13 +1317,13 @@ BEGIN
         FROM DocumentType
         ORDER BY NEWID();
 
-        -- Generar un n˙mero de documento aleatorio
+        -- Generar un n√∫mero de documento aleatorio
         SET @DocumentNumber = CONCAT('DOC-', CAST(ABS(CHECKSUM(NEWID())) % 100000 AS VARCHAR(10)));
 
-        -- Generar una fecha de emisiÛn aleatoria (˙ltimos 5 aÒos)
+        -- Generar una fecha de emisi√≥n aleatoria (√∫ltimos 5 a√±os)
         SET @IssueDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID()) % 1825), GETDATE());
 
-        -- Generar una fecha de expiraciÛn aleatoria (entre 1 y 5 aÒos despuÈs de la fecha de emisiÛn)
+        -- Generar una fecha de expiraci√≥n aleatoria (entre 1 y 5 a√±os despu√©s de la fecha de emisi√≥n)
         SET @ExpiryDate = DATEADD(YEAR, ABS(CHECKSUM(NEWID()) % 5) + 1, @IssueDate);
 
         -- Seleccionar un IssuingCityID aleatorio
@@ -1359,8 +1361,8 @@ BEGIN
 
     WHILE @i < @NumberOfPayments
     BEGIN
-        -- Generar una fecha aleatoria dentro de los prÛximos 2 aÒos
-        SET @DDate = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 dÌas = 2 aÒos
+        -- Generar una fecha aleatoria dentro de los pr√≥ximos 2 a√±os
+        SET @DDate = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 d√≠as = 2 a√±os
 
         -- Generar un importe aleatorio entre 10 y 1000
         SET @Amount = ROUND((RAND() * 9990) + 10, 2); -- Monto entre 10 y 1000
@@ -1398,8 +1400,8 @@ BEGIN
 
     WHILE @i < @NumberOfReservations
     BEGIN
-        -- Generar una fecha aleatoria dentro de los prÛximos 2 aÒos
-        SET @Date = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 dÌas = 2 aÒos
+        -- Generar una fecha aleatoria dentro de los pr√≥ximos 2 a√±os
+        SET @Date = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 d√≠as = 2 a√±os
 
         -- Seleccionar un CustomerID aleatorio
         SELECT TOP 1 @CustomerID = CustomerID
@@ -1446,21 +1448,21 @@ BEGIN
 
     WHILE @i < @NumberOfTickets
     BEGIN
-        -- Generar un cÛdigo de ticket aleatorio
+        -- Generar un c√≥digo de ticket aleatorio
         SET @TicketingCode = CONCAT('TICKET-', CAST(ABS(CHECKSUM(NEWID())) % 100000 AS VARCHAR(10)));
 
-        -- Verificar que no exista el cÛdigo generado y regenerar si es necesario
+        -- Verificar que no exista el c√≥digo generado y regenerar si es necesario
         WHILE EXISTS (SELECT 1 FROM Ticket WHERE TicketingCode = @TicketingCode)
         BEGIN
-            -- Regenerar el cÛdigo si ya existe
+            -- Regenerar el c√≥digo si ya existe
             SET @TicketingCode = CONCAT('TICKET-', CAST(ABS(CHECKSUM(NEWID())) % 100000 AS VARCHAR(10)));
         END
 
-        -- Generar un n˙mero aleatorio para el ticket
-        SET @Number = ABS(CHECKSUM(NEWID()) % 1000) + 1; -- N˙mero entre 1 y 1000
+        -- Generar un n√∫mero aleatorio para el ticket
+        SET @Number = ABS(CHECKSUM(NEWID()) % 1000) + 1; -- N√∫mero entre 1 y 1000
 
-        -- Generar una fecha de compra aleatoria dentro de los prÛximos 2 aÒos
-        SET @PurchaseDate = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 dÌas = 2 aÒos
+        -- Generar una fecha de compra aleatoria dentro de los pr√≥ximos 2 a√±os
+        SET @PurchaseDate = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 d√≠as = 2 a√±os
 
         -- Generar un importe total aleatorio
         SET @TotalImport = ROUND(RAND() * 500, 2); -- Importe entre 0 y 500
@@ -1510,8 +1512,8 @@ BEGIN
 
     WHILE @i < @NumberOfCheckIns
     BEGIN
-        -- Generar una fecha de check-in aleatoria dentro de los prÛximos 2 aÒos
-        SET @CheckInDateTime = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 dÌas = 2 aÒos
+        -- Generar una fecha de check-in aleatoria dentro de los pr√≥ximos 2 a√±os
+        SET @CheckInDateTime = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 d√≠as = 2 a√±os
 
         -- Generar una puerta de embarque aleatoria
         SET @BoardingGate = CONCAT('Gate ', CHAR(65 + ABS(CHECKSUM(NEWID()) % 26)), CAST(ABS(CHECKSUM(NEWID()) % 10) AS VARCHAR(1)));
@@ -1526,8 +1528,8 @@ BEGIN
         FROM Ticket
         ORDER BY NEWID();
 
-        -- Generar una hora de embarque aleatoria (deberÌa ser despuÈs de la fecha de check-in)
-        SET @BoardingTime = DATEADD(MINUTE, ABS(CHECKSUM(NEWID()) % 120) + 1, @CheckInDateTime); -- Entre 1 y 120 minutos despuÈs del check-in
+        -- Generar una hora de embarque aleatoria (deber√≠a ser despu√©s de la fecha de check-in)
+        SET @BoardingTime = DATEADD(MINUTE, ABS(CHECKSUM(NEWID()) % 120) + 1, @CheckInDateTime); -- Entre 1 y 120 minutos despu√©s del check-in
 
         -- Insertar los datos en la tabla CheckIn
         INSERT INTO CheckIn (CheckInDateTime, BoardingGate, CheckInStatus, TicketID, BoardingTime)
@@ -1557,13 +1559,13 @@ BEGIN
 
     WHILE @i < @NumberOfCoupons
     BEGIN
-        -- Generar una fecha de canje aleatoria dentro de los prÛximos 2 aÒos
-        SET @DateOfRedemption = DATEADD(DAY, -ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 dÌas = 2 aÒos
+        -- Generar una fecha de canje aleatoria dentro de los pr√≥ximos 2 a√±os
+        SET @DateOfRedemption = DATEADD(DAY, -ABS(CHECKSUM(NEWID()) % 730), GETDATE()); -- 730 d√≠as = 2 a√±os
 
         -- Generar un standby aleatorio
         SET @Standby = CONCAT('Standby-', CAST(ABS(CHECKSUM(NEWID()) % 1000) AS VARCHAR(10)));
 
-        -- Generar un cÛdigo de comida aleatorio
+        -- Generar un c√≥digo de comida aleatorio
         SET @MealCode = CONCAT('MEAL-', CAST(ABS(CHECKSUM(NEWID()) % 100) AS VARCHAR(2)));
 
         -- Seleccionar un TicketID aleatorio
@@ -1606,13 +1608,13 @@ BEGIN
 
     WHILE @i < @NumberOfPolicies
     BEGIN
-        -- Generar una descripciÛn aleatoria
-        SET @Descripcion = CONCAT('PolÌtica de cancelaciÛn ', CAST(ABS(CHECKSUM(NEWID()) % 1000) AS VARCHAR(10)));
+        -- Generar una descripci√≥n aleatoria
+        SET @Descripcion = CONCAT('Pol√≠tica de cancelaci√≥n ', CAST(ABS(CHECKSUM(NEWID()) % 1000) AS VARCHAR(10)));
 
-        -- Generar un n˙mero de dÌas aleatorio entre 1 y 30
-        SET @DaysBeforeFlight = ABS(CHECKSUM(NEWID()) % 30) + 1; -- Entre 1 y 30 dÌas
+        -- Generar un n√∫mero de d√≠as aleatorio entre 1 y 30
+        SET @DaysBeforeFlight = ABS(CHECKSUM(NEWID()) % 30) + 1; -- Entre 1 y 30 d√≠as
 
-        -- Generar una tarifa de cancelaciÛn aleatoria entre 0 y 500
+        -- Generar una tarifa de cancelaci√≥n aleatoria entre 0 y 500
         SET @CancellationFee = ROUND(RAND() * 500, 2); -- Tarifa entre 0 y 500
 
         -- Seleccionar un TicketID aleatorio
@@ -1629,7 +1631,7 @@ BEGIN
     END
 END;
 
-EXEC InsertRandomCancellationPolicies @NumberOfPolicies†=†500;
+EXEC InsertRandomCancellationPolicies @NumberOfPolicies¬†=¬†500;
 ----
 CREATE PROCEDURE InsertRandomLuggagePieces
     @NumberOfPieces INT
@@ -1644,8 +1646,8 @@ BEGIN
 
     WHILE @i < @NumberOfPieces
     BEGIN
-        -- Generar un n˙mero de equipaje aleatorio entre 1 y 5
-        SET @Number = ABS(CHECKSUM(NEWID()) % 5) + 1; -- N˙mero entre 1 y 5
+        -- Generar un n√∫mero de equipaje aleatorio entre 1 y 5
+        SET @Number = ABS(CHECKSUM(NEWID()) % 5) + 1; -- N√∫mero entre 1 y 5
 
         -- Generar un peso aleatorio entre 1.00 y 999.99 kg
         SET @Weight = ROUND((RAND() * (999.99 - 1.00)) + 1.00, 2); -- Peso entre 1.00 y 999.99
@@ -1664,7 +1666,7 @@ BEGIN
     END
 END;
 
-EXEC InsertRandomLuggagePieces @NumberOfPieces†=†8000;
+EXEC InsertRandomLuggagePieces @NumberOfPieces¬†=¬†8000;
 
 -----
 CREATE PROCEDURE InsertRandomAssignments
@@ -1678,7 +1680,7 @@ BEGIN
     DECLARE @CustomerTypeID INT;
     WHILE @i < @NumberOfAssignments
     BEGIN
-        -- Generar una fecha aleatoria en los ˙ltimos 365 dÌas
+        -- Generar una fecha aleatoria en los √∫ltimos 365 d√≠as
         SET @AssignmentDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID()) % 365), GETDATE());
         -- Seleccionar un CustomerID aleatorio
         SELECT TOP 1 @CustomerID = CustomerID
@@ -1716,17 +1718,17 @@ BEGIN
 
     WHILE @i < @NumberOfCards
     BEGIN
-        -- Generar un n˙mero de millas aleatorio entre 0 y 100000
+        -- Generar un n√∫mero de millas aleatorio entre 0 y 100000
         SET @Miles = ABS(CHECKSUM(NEWID()) % 100001); -- Entre 0 y 100,000 millas
 
-        -- Generar un cÛdigo de comida aleatorio (por ejemplo: "Meal123")
+        -- Generar un c√≥digo de comida aleatorio (por ejemplo: "Meal123")
         SET @MealCode = CONCAT('Meal', CAST(ABS(CHECKSUM(NEWID()) % 9999) AS VARCHAR(4)));
 
-        -- Generar una fecha de emisiÛn aleatoria en los ˙ltimos 5 aÒos
-        SET @IssueDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID()) % 1825), GETDATE()); -- ⁄ltimos 5 aÒos
+        -- Generar una fecha de emisi√≥n aleatoria en los √∫ltimos 5 a√±os
+        SET @IssueDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID()) % 1825), GETDATE()); -- √öltimos 5 a√±os
 
-        -- Generar una fecha de expiraciÛn aleatoria dentro de los prÛximos 5 aÒos
-        SET @ExpiryDate = DATEADD(YEAR, 1 + ABS(CHECKSUM(NEWID()) % 5), @IssueDate); -- Entre 1 y 5 aÒos
+        -- Generar una fecha de expiraci√≥n aleatoria dentro de los pr√≥ximos 5 a√±os
+        SET @ExpiryDate = DATEADD(YEAR, 1 + ABS(CHECKSUM(NEWID()) % 5), @IssueDate); -- Entre 1 y 5 a√±os
 
         -- Seleccionar un CustomerID aleatorio
         SELECT TOP 1 @CustomerID = CustomerID
@@ -1768,7 +1770,7 @@ BEGIN
         FROM person
         ORDER BY NEWID();
 
-        -- Generar una posiciÛn aleatoria
+        -- Generar una posici√≥n aleatoria
         SET @Position = CASE ABS(CHECKSUM(NEWID()) % 5)
             WHEN 0 THEN 'Pilot'
             WHEN 1 THEN 'Co-Pilot'
@@ -1777,10 +1779,10 @@ BEGIN
             ELSE 'Ground Staff'
         END;
 
-        -- Generar una fecha de empleo aleatoria dentro de los ˙ltimos 10 aÒos
+        -- Generar una fecha de empleo aleatoria dentro de los √∫ltimos 10 a√±os
         SET @EmploymentDate = DATEADD(YEAR, -ABS(CHECKSUM(NEWID()) % 10), GETDATE());
 
-        -- Generar un n˙mero aleatorio de horas de vuelo entre 100 y 5000
+        -- Generar un n√∫mero aleatorio de horas de vuelo entre 100 y 5000
         SET @FlightHours = ABS(CHECKSUM(NEWID()) % 4900) + 100; -- Entre 100 y 5000
 
         -- Insertar los datos en la tabla CrewMember
@@ -1812,14 +1814,14 @@ BEGIN
 
     WHILE @i < @NumberOfCrews
     BEGIN
-        -- Generar una fecha de asignaciÛn aleatoria
-        SET @AssignmentDate = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 30), GETDATE()); -- Hasta 30 dÌas a partir de hoy
+        -- Generar una fecha de asignaci√≥n aleatoria
+        SET @AssignmentDate = DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 30), GETDATE()); -- Hasta 30 d√≠as a partir de hoy
 
         -- Generar una hora de inicio aleatoria
-        SET @ShiftStart = DATEADD(HOUR, ABS(CHECKSUM(NEWID()) % 24), CAST(GETDATE() AS DATETIME)); -- Hora de inicio en el dÌa actual
+        SET @ShiftStart = DATEADD(HOUR, ABS(CHECKSUM(NEWID()) % 24), CAST(GETDATE() AS DATETIME)); -- Hora de inicio en el d√≠a actual
 
-        -- Generar una hora de fin aleatoria (asegurarse de que sea despuÈs de ShiftStart)
-        SET @ShiftEnd = DATEADD(HOUR, ABS(CHECKSUM(NEWID()) % 8) + 1, @ShiftStart); -- Entre 1 y 8 horas despuÈs
+        -- Generar una hora de fin aleatoria (asegurarse de que sea despu√©s de ShiftStart)
+        SET @ShiftEnd = DATEADD(HOUR, ABS(CHECKSUM(NEWID()) % 8) + 1, @ShiftStart); -- Entre 1 y 8 horas despu√©s
 
         -- Generar un estado aleatorio
         SET @Status = CASE 
